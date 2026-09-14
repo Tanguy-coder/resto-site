@@ -209,7 +209,7 @@
             <span class="section-label">{{ $settings['about_eyebrow'] ?? "Notre esprit" }}</span>
             <h2 class="section-title mt-3">{{ $settings['about_title'] ?? 'Le burger artisanal, c\'est notre spécialité' }}</h2>
             <p class="text-foreground/70 mt-6 leading-relaxed text-lg">{{ $settings['about_text_1'] ?? 'Tout part d\'une idée simple : préparer chaque burger, tacos et pizza comme s\'il était le premier.' }}</p>
-            <p class="text-foreground/70 mt-4 leading-relaxed">{{ $settings['about_text_2'] ?? 'Depuis nos cuisines à Kouba et Chéraga, on sert celles et ceux qui veulent manger vite sans sacrifier le goût.' }}</p>
+            <p class="text-foreground/70 mt-4 leading-relaxed">{{ $settings['about_text_2'] ?? 'Depuis nos cuisines, on sert celles et ceux qui veulent manger vite sans sacrifier le goût.' }}</p>
 
             <div class="grid grid-cols-3 gap-6 mt-12 max-w-lg mx-auto">
                 <div class="text-center">
@@ -221,7 +221,7 @@
                     <p class="text-foreground/60 text-xs mt-1">{{ $settings['stat_2_label'] ?? '% Fait maison' }}</p>
                 </div>
                 <div class="text-center">
-                    <span class="text-4xl lg:text-5xl font-heading font-extrabold text-accent-mustard block">12h+</span>
+                    <span class="text-4xl lg:text-5xl font-heading font-extrabold text-accent-mustard block">{{ $settings['stat_3_value'] ?? '12' }}h+</span>
                     <p class="text-foreground/60 text-xs mt-1">{{ $settings['stat_3_label'] ?? "D'ouverture/jour" }}</p>
                 </div>
             </div>
@@ -229,47 +229,69 @@
     </section>
 
     {{-- Testimonials --}}
-    <section class="fade-up py-20 lg:py-28 px-6 lg:px-12 relative overflow-hidden" x-data="{ current: 0, total: {{ $testimonials->count() }} }">
+    <section class="fade-up py-20 lg:py-28 px-6 lg:px-12 relative overflow-hidden">
         {{-- Sauces2 image — LEFT side, barely peeking --}}
         <img src="{{ asset('images/sauces2.png') }}" alt="" class="hidden lg:block absolute left-0 top-1/2 w-auto max-h-[75%] max-w-[300px] object-contain object-left pointer-events-none z-0" style="transform: translateY(-50%) translateX(-40%)" loading="lazy">
-        <div class="max-w-6xl mx-auto relative z-10">
-            <div class="text-center max-w-2xl mx-auto mb-12">
+        <div class="max-w-4xl mx-auto relative z-10"
+             x-data="{
+                current: 0,
+                total: {{ $testimonials->count() }},
+                touchStartX: null,
+                timer: null,
+                init() {
+                    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                        this.timer = setInterval(() => this.next(), 5000);
+                    }
+                },
+                next() { this.current = (this.current + 1) % this.total; },
+                prev() { this.current = (this.current - 1 + this.total) % this.total; },
+                resetTimer() { clearInterval(this.timer); this.timer = setInterval(() => this.next(), 5000); }
+             }">
+            <div class="text-center max-w-2xl mx-auto mb-10">
                 <span class="section-label">{{ $settings['testimonials_eyebrow'] ?? 'La parole aux habitués' }}</span>
                 <h2 class="section-title mt-3">{{ $settings['testimonials_title'] ?? 'Ce que disent nos clients' }}</h2>
                 <p class="section-desc mx-auto mt-3">{{ $settings['testimonials_desc'] ?? 'Des expériences partagées par nos clients.' }}</p>
             </div>
 
-            <div class="relative overflow-hidden">
-                <div class="flex transition-transform duration-500 ease-out" :style="'transform: translateX(-' + (current * 100) + '%)'">
+            {{-- Glow card --}}
+            <div class="rounded-3xl bg-surface border border-primary/40 px-6 py-10 sm:px-10 sm:py-12"
+                 style="box-shadow: 0 0 40px 5px color-mix(in srgb, var(--color-primary) 25%, transparent)"
+                 @touchstart.passive="touchStartX = $event.touches[0].clientX"
+                 @touchend.passive="if (touchStartX !== null) { let d = touchStartX - $event.changedTouches[0].clientX; if (d > 40) { next(); resetTimer(); } else if (d < -40) { prev(); resetTimer(); } touchStartX = null; }"
+                 aria-live="polite" aria-atomic="true">
+
+                <div class="relative w-full min-h-72">
                     @foreach($testimonials as $index => $testimonial)
-                        <div class="w-full shrink-0 px-2">
-                            <div class="card-food-flat p-8 max-w-2xl mx-auto">
-                                <p class="text-foreground/80 text-base md:text-lg italic leading-relaxed">"{{ $testimonial->content }}"</p>
-                                <div class="flex justify-center gap-0.5 text-accent-mustard mt-5">
-                                    @for($i = 0; $i < $testimonial->rating; $i++) <span>★</span> @endfor
-                                </div>
-                                <div class="mt-4">
-                                    <p class="font-bold text-foreground">{{ $testimonial->name }}</p>
-                                    @if($testimonial->location)
-                                        <p class="text-accent-green text-sm mt-0.5">📍 {{ $testimonial->location }}</p>
-                                    @endif
-                                </div>
+                        <div class="absolute inset-0 flex flex-col items-center gap-4 text-center transition-[transform,opacity] duration-700 ease-out"
+                             :class="{{ $index }} === current ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-6 pointer-events-none'"
+                             :aria-hidden="{{ $index }} !== current ? 'true' : 'false'">
+                            <p class="text-foreground/80 text-base md:text-lg italic leading-relaxed max-w-xl">"{{ $testimonial->content }}"</p>
+                            <div class="flex justify-center gap-0.5 text-accent-mustard text-lg">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <span class="{{ $i <= $testimonial->rating ? 'text-accent-mustard' : 'text-foreground/20' }}">★</span>
+                                @endfor
+                            </div>
+                            <div class="mt-1">
+                                <p class="font-bold text-foreground">{{ $testimonial->name }}</p>
+                                @if($testimonial->location)
+                                    <p class="text-accent-green text-sm mt-0.5">📍 {{ $testimonial->location }}</p>
+                                @endif
                             </div>
                         </div>
                     @endforeach
                 </div>
-            </div>
 
-            <div class="flex items-center justify-center gap-4 mt-8">
-                <button @click="current = current > 0 ? current - 1 : total - 1"
-                        class="w-9 h-9 rounded-full bg-surface border border-primary/40 flex items-center justify-center text-foreground/50 hover:text-foreground hover:border-primary transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                </button>
-                <span class="text-sm text-foreground/60 font-medium">Avis <span x-text="current + 1" class="text-foreground">1</span> sur <span class="text-foreground">{{ $testimonials->count() }}</span></span>
-                <button @click="current = current < total - 1 ? current + 1 : 0"
-                        class="w-9 h-9 rounded-full bg-surface border border-primary/40 flex items-center justify-center text-foreground/50 hover:text-foreground hover:border-primary transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                </button>
+                <div class="flex items-center justify-center gap-4 mt-8">
+                    <button @click="prev(); resetTimer()"
+                            class="w-9 h-9 rounded-full bg-surface-2 border border-primary/40 flex items-center justify-center text-foreground/50 hover:text-foreground hover:border-primary transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <span class="text-sm text-foreground/60 font-medium">Avis <span x-text="current + 1" class="text-foreground font-semibold">1</span> sur <span class="text-foreground font-semibold">{{ $testimonials->count() }}</span></span>
+                    <button @click="next(); resetTimer()"
+                            class="w-9 h-9 rounded-full bg-surface-2 border border-primary/40 flex items-center justify-center text-foreground/50 hover:text-foreground hover:border-primary transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
             </div>
         </div>
     </section>

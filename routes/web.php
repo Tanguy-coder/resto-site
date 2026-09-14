@@ -11,7 +11,37 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/deploy/{secret}', function (string $secret) {
+    if ($secret !== config('app.deploy_secret')) {
+        abort(403);
+    }
+
+    $output = [];
+
+    Artisan::call('migrate', ['--force' => true]);
+    $output[] = '✓ migrate: ' . trim(Artisan::output());
+
+    Artisan::call('storage:link', ['--force' => true]);
+    $output[] = '✓ storage:link: ' . trim(Artisan::output());
+
+    Artisan::call('config:clear');
+    $output[] = '✓ config:clear';
+
+    Artisan::call('route:clear');
+    $output[] = '✓ route:clear';
+
+    Artisan::call('view:clear');
+    $output[] = '✓ view:clear';
+
+    Artisan::call('cache:clear');
+    $output[] = '✓ cache:clear';
+
+    return response('<pre>' . implode("\n", $output) . '</pre>', 200)
+        ->header('Content-Type', 'text/html');
+})->name('deploy');
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/commande', [PageController::class, 'menu'])->name('menu');
