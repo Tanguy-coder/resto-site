@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'NIWA FOOD - Contact')
+@section('title', ($settings['site_name'] ?? 'Restaurant') . ' - Contact')
 
 @section('content')
 

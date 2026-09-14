@@ -1,12 +1,12 @@
 @extends('layouts.public')
 
-@section('title', 'NIWA FOOD - Finaliser ma commande')
+@section('title', ($settings['site_name'] ?? 'Restaurant') . ' - Finaliser ma commande')
 
 @section('content')
 
     <section class="py-8 lg:py-12 px-6 lg:px-12"
         x-data="{
-            cart: JSON.parse(localStorage.getItem('niwa_cart') || '[]'),
+            cart: JSON.parse(localStorage.getItem('restaurant_cart') || '[]'),
             restaurant: null,
             serviceType: 'sur_place',
             name: '',
@@ -91,7 +91,7 @@
                     this.orderNumber = data.order_number;
                     this.submitted = true;
 
-                    localStorage.removeItem('niwa_cart');
+                    localStorage.removeItem('restaurant_cart');
                     if (window.Alpine?.store('cart')) {
                         window.Alpine.store('cart').items = [];
                         window.Alpine.store('cart')._save();

@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'NIWA FOOD - À propos')
+@section('title', ($settings['site_name'] ?? 'Restaurant') . ' - À propos')
 
 @section('content')
 
@@ -12,7 +12,7 @@
                 Notre carte se lit<br>
                 <span class="text-accent-mustard font-normal">comme un garage</span>
             </h1>
-            <p class="text-foreground/55 mt-4 max-w-lg leading-relaxed">{{ $settings['about_page_subtitle'] ?? 'Niwa Food est un fast-food fait maison, né à Kouba et installé depuis à Chéraga. Notre spécialité tient en deux mots : le burger artisanal.' }}</p>
+            <p class="text-foreground/55 mt-4 max-w-lg leading-relaxed">{{ $settings['about_page_subtitle'] ?? 'Un fast-food fait maison. Notre spécialité tient en deux mots : le burger artisanal.' }}</p>
             <div class="h-1 w-12 bg-accent-green rounded-full mt-5"></div>
         </div>
     </section>
@@ -22,7 +22,7 @@
         <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
                 <div class="rounded-2xl overflow-hidden shadow-lg">
-                    <img src="{{ asset('images/kouba.png') }}" alt="Niwa Food Kouba" class="w-full h-auto object-cover">
+                    <img src="{{ asset('images/kouba.png') }}" alt="{{ $settings['site_name'] ?? 'Restaurant' }}" class="w-full h-auto object-cover">
                 </div>
                 <div class="lg:pt-4">
                     <h2 class="font-heading text-2xl lg:text-3xl font-bold text-accent-green">Tout part d'une idée simple</h2>

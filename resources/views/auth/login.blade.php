@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - NIWA FOOD</title>
+    <title>Connexion - {{ strtoupper($settings['site_name'] ?? 'Admin') }}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; color: #e0e0e0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -27,7 +27,7 @@
 </head>
 <body>
     <div class="login-card">
-        <h1>NIWA FOOD</h1>
+        <h1>{{ strtoupper($settings['site_name'] ?? 'Admin') }}</h1>
         <p>Espace d'administration</p>
 
         @if($errors->any())

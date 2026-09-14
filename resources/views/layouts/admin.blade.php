@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin') - NIWA FOOD</title>
+    <title>@yield('title', 'Admin') - {{ strtoupper($settings['site_name'] ?? 'Admin') }}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; color: #e0e0e0; display: flex; min-height: 100vh; }
@@ -85,7 +85,7 @@
 <body>
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <h2>NIWA FOOD</h2>
+            <h2>{{ strtoupper($settings['site_name'] ?? 'Admin') }}</h2>
             <small style="color:#94a3b8;">Administration</small>
         </div>
         <nav class="sidebar-nav">
@@ -118,7 +118,7 @@
 
     <div class="main">
         <header class="topbar">
-            <h1>NIWA FOOD - Admin</h1>
+            <h1>{{ strtoupper($settings['site_name'] ?? 'Admin') }} - Admin</h1>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="logout-btn">Déconnexion</button>

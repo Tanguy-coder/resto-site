@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('layouts.public', function ($view) {
+        View::composer(['layouts.public', 'layouts.admin', 'auth.login'], function ($view) {
             $data = $view->getData();
             if (!isset($data['settings'])) {
                 $view->with('settings', SiteSetting::all()->pluck('value', 'key'));

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', $settings['site_name'] ?? 'NIWA FOOD')</title>
+    <title>@yield('title', $settings['site_name'] ?? 'Restaurant')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,8 +21,8 @@
             <div class="flex items-center justify-between h-[72px]">
                 {{-- Logo --}}
                 @php
-                    $logoPath = $settings['site_logo'] ?? 'images/logo-niwa.png';
-                    $siteName = $settings['site_name'] ?? 'NIWA FOOD';
+                    $logoPath = $settings['site_logo'] ?? 'images/logo.png';
+                    $siteName = $settings['site_name'] ?? 'Restaurant';
                     $siteNameAccent = $settings['site_name_accent'] ?? null;
                     if ($siteNameAccent && str_ends_with(strtoupper($siteName), strtoupper($siteNameAccent))) {
                         $nameMain = trim(substr($siteName, 0, -strlen($siteNameAccent)));
@@ -523,7 +523,7 @@
 
         <div class="border-t border-primary/20">
             <div class="max-w-6xl mx-auto px-6 lg:px-12 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
-                <p class="text-foreground/40 text-sm">&copy; {{ date('Y') }} {{ $settings['site_name'] ?? 'Niwa Food' }} &mdash; Tous droits réservés</p>
+                <p class="text-foreground/40 text-sm">&copy; {{ date('Y') }} {{ $settings['site_name'] ?? 'Restaurant' }} &mdash; Tous droits réservés</p>
                 <p class="text-foreground/40 text-sm">{{ $settings['footer_credit'] ?? 'Développé par Mehdi Abdi' }}</p>
             </div>
         </div>

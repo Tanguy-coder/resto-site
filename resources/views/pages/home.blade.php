@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'NIWA FOOD - Fast-food fait maison')
+@section('title', ($settings['site_name'] ?? 'Restaurant') . ' - Fast-food fait maison')
 
 @section('content')
 
@@ -104,7 +104,7 @@
         <img src="{{ asset('images/sauces.png') }}" alt="" class="hidden lg:block absolute left-0 top-1/2 w-auto max-h-[75%] max-w-[300px] object-contain object-left pointer-events-none z-0" style="transform: translateY(-50%) translateX(-40%)" loading="lazy">
         <div class="max-w-6xl mx-auto relative z-10">
             <div class="text-center max-w-2xl mx-auto mb-12">
-                <span class="section-label">{{ $settings['bestseller_eyebrow'] ?? 'La sélection Niwa' }}</span>
+                <span class="section-label">{{ $settings['bestseller_eyebrow'] ?? 'Notre sélection' }}</span>
                 <h2 class="section-title mt-3">{{ $settings['bestseller_title'] ?? 'Les best-sellers' }}</h2>
                 <p class="section-desc mx-auto mt-3">{{ $settings['bestseller_desc'] ?? 'Les recettes que nos clients choisissent encore et encore.' }}</p>
             </div>
@@ -206,9 +206,9 @@
     {{-- About / Story --}}
     <section class="fade-up py-20 lg:py-28 px-6 lg:px-12 relative overflow-hidden">
         <div class="max-w-3xl mx-auto relative z-10 text-center">
-            <span class="section-label">{{ $settings['about_eyebrow'] ?? "L'esprit Niwa" }}</span>
+            <span class="section-label">{{ $settings['about_eyebrow'] ?? "Notre esprit" }}</span>
             <h2 class="section-title mt-3">{{ $settings['about_title'] ?? 'Le burger artisanal, c\'est notre spécialité' }}</h2>
-            <p class="text-foreground/70 mt-6 leading-relaxed text-lg">{{ $settings['about_text_1'] ?? 'Chez Niwa Food, tout part d\'une idée simple : préparer chaque burger, tacos et pizza comme s\'il était le premier.' }}</p>
+            <p class="text-foreground/70 mt-6 leading-relaxed text-lg">{{ $settings['about_text_1'] ?? 'Tout part d\'une idée simple : préparer chaque burger, tacos et pizza comme s\'il était le premier.' }}</p>
             <p class="text-foreground/70 mt-4 leading-relaxed">{{ $settings['about_text_2'] ?? 'Depuis nos cuisines à Kouba et Chéraga, on sert celles et ceux qui veulent manger vite sans sacrifier le goût.' }}</p>
 
             <div class="grid grid-cols-3 gap-6 mt-12 max-w-lg mx-auto">
@@ -236,7 +236,7 @@
             <div class="text-center max-w-2xl mx-auto mb-12">
                 <span class="section-label">{{ $settings['testimonials_eyebrow'] ?? 'La parole aux habitués' }}</span>
                 <h2 class="section-title mt-3">{{ $settings['testimonials_title'] ?? 'Ce que disent nos clients' }}</h2>
-                <p class="section-desc mx-auto mt-3">{{ $settings['testimonials_desc'] ?? 'Des expériences partagées après un passage chez Niwa Food.' }}</p>
+                <p class="section-desc mx-auto mt-3">{{ $settings['testimonials_desc'] ?? 'Des expériences partagées par nos clients.' }}</p>
             </div>
 
             <div class="relative overflow-hidden">

@@ -11,7 +11,7 @@ window.gsap = gsap;
 window.ScrollTrigger = ScrollTrigger;
 
 Alpine.store('cart', {
-    items: JSON.parse(localStorage.getItem('niwa_cart') || '[]'),
+    items: JSON.parse(localStorage.getItem('restaurant_cart') || '[]'),
 
     get count() {
         return this.items.reduce((sum, i) => sum + i.quantity, 0);
@@ -59,7 +59,7 @@ Alpine.store('cart', {
     },
 
     _save() {
-        localStorage.setItem('niwa_cart', JSON.stringify(this.items));
+        localStorage.setItem('restaurant_cart', JSON.stringify(this.items));
     }
 });
 
