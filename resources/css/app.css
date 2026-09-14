@@ -1,0 +1,126 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-heading: 'Baloo 2', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+    --color-background: #FBF5EC;
+    --color-foreground: #2C2C2C;
+    --color-primary: #C4A882;
+    --color-primary-dark: #A08B6C;
+    --color-on-primary: #FFFFFF;
+    --color-accent-mustard: #D9A94D;
+    --color-accent-salmon: #B87D5E;
+    --color-accent-green: #3B7A57;
+    --color-accent-slate: #7A8B7A;
+    --color-surface: #FFFFFF;
+    --color-surface-2: #F5EEE4;
+    --color-border-subtle: #E8DDD0;
+
+    --shadow-food-sm: 0 2px 12px rgba(180, 155, 120, 0.08);
+    --shadow-food-md: 0 4px 24px rgba(180, 155, 120, 0.12);
+    --shadow-food-lg: 0 8px 40px rgba(180, 155, 120, 0.16);
+    --shadow-gold-glow: 0 0 20px 5px rgba(217, 169, 77, 0.45);
+}
+
+html.dark {
+    --color-background: #171412;
+    --color-foreground: #E8E0D8;
+    --color-primary-dark: #D4B896;
+    --color-accent-mustard: #E0B85C;
+    --color-accent-salmon: #C89070;
+    --color-accent-green: #4CAE6A;
+    --color-surface: #1F1C19;
+    --color-surface-2: #282420;
+    --color-border-subtle: #3A3530;
+    --shadow-food-sm: 0 2px 12px rgba(0, 0, 0, 0.3);
+    --shadow-food-md: 0 4px 24px rgba(0, 0, 0, 0.4);
+    --shadow-food-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+    --shadow-gold-glow: 0 0 20px 5px rgba(217, 169, 77, 0.3);
+}
+
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.dark .deco-blob path { fill: #3A3020 !important; opacity: 0.8 !important; }
+.dark .deco-wave path { stroke: #6B5A3D !important; opacity: 0.4 !important; }
+.dark .hero-circle-bg { background-color: #2A2520 !important; box-shadow: 0 0 60px 15px rgba(180, 140, 60, 0.15) !important; }
+
+@layer base {
+    html { scroll-behavior: smooth; }
+    body {
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+        font-family: var(--font-sans);
+        cursor: url('/cursor.png') 6 6, auto;
+    }
+    [cursor-pointer], .cursor-pointer, button, a, input, select, textarea, label[for] {
+        cursor: url('/cursor-click.png') 8 8, pointer;
+    }
+    [x-cloak] { display: none !important; }
+}
+
+@layer components {
+    .font-heading { font-family: var(--font-heading); }
+
+    .btn-primary-warm {
+        @apply inline-flex items-center justify-center gap-2 px-7 py-3 bg-primary text-on-primary font-semibold rounded-full transition-all duration-300 hover:bg-primary-dark;
+    }
+    .btn-mustard {
+        @apply inline-flex items-center justify-center gap-2 px-7 py-3 bg-accent-mustard text-on-primary font-semibold rounded-full transition-all duration-300 hover:shadow-gold-glow;
+    }
+    .btn-outline-green {
+        @apply inline-flex items-center justify-center gap-2 px-7 py-3 border border-accent-green text-accent-green font-semibold rounded-full transition-all duration-300 hover:bg-accent-green hover:text-on-primary;
+    }
+    .btn-outline-mustard {
+        @apply inline-flex items-center justify-center gap-2 px-7 py-3 border border-accent-mustard text-accent-mustard font-semibold rounded-full transition-all duration-300 hover:bg-accent-mustard hover:text-on-primary;
+    }
+
+    .section-label {
+        @apply text-accent-green text-xs font-semibold uppercase tracking-widest;
+    }
+    .section-title {
+        @apply font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-foreground;
+    }
+    .section-desc {
+        @apply text-foreground/70 text-base md:text-lg leading-relaxed;
+    }
+
+    .card-food {
+        @apply bg-surface border-[0.5px] border-primary rounded-2xl overflow-hidden shadow-food-sm transition-all duration-300 hover:shadow-food-md hover:-translate-y-0.5;
+    }
+    .card-food-flat {
+        @apply bg-surface border-[0.5px] border-primary rounded-2xl overflow-hidden shadow-food-sm;
+    }
+
+    .social-circle {
+        @apply w-10 h-10 flex items-center justify-center rounded-full text-on-primary transition-all duration-300;
+    }
+
+    .fade-up {
+        opacity: 0;
+        transform: translateY(1.5rem);
+    }
+    .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pm-dish-enter {
+        animation: dishIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes dishIn {
+        from { opacity: 0; transform: scale(0.85) translateY(20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+}
