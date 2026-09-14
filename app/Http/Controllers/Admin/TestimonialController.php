@@ -66,4 +66,11 @@ class TestimonialController extends Controller
         $testimonial->delete();
         return redirect()->route('admin.testimonials.index')->with('success', 'Témoignage supprimé.');
     }
+
+    public function approve(Testimonial $testimonial)
+    {
+        $testimonial->update(['is_active' => !$testimonial->is_active]);
+        $label = $testimonial->is_active ? 'approuvé' : 'masqué';
+        return back()->with('success', "Avis $label.");
+    }
 }

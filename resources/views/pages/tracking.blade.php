@@ -11,12 +11,15 @@
             order: null,
             searching: false,
             notFound: false,
+            pollTimer: null,
+            prevStatus: null,
 
             async search() {
                 if (!this.code || !this.restaurant) return;
                 this.searching = true;
                 this.notFound = false;
                 this.order = null;
+                this.stopPolling();
 
                 try {
                     const res = await fetch('{{ route('api.orders.track') }}', {
@@ -36,12 +39,67 @@
                         this.notFound = true;
                     } else {
                         this.order = await res.json();
+                        this.prevStatus = this.order.status;
+                        this.startPolling();
                     }
                 } catch (e) {
                     this.notFound = true;
                 } finally {
                     this.searching = false;
                 }
+            },
+
+            startPolling() {
+                this.stopPolling();
+                if (this.order && !this.order.cancelled && this.order.status !== 'delivered') {
+                    this.pollTimer = setInterval(() => this.pollStatus(), 20000);
+                }
+            },
+            stopPolling() {
+                if (this.pollTimer) { clearInterval(this.pollTimer); this.pollTimer = null; }
+            },
+            async pollStatus() {
+                try {
+                    const res = await fetch('{{ route('api.orders.track') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            order_number: this.order.order_number,
+                            location_id: this.order.location_id,
+                        }),
+                    });
+                    if (!res.ok) return;
+                    const fresh = await res.json();
+                    const newStatus = fresh.status;
+                    if (newStatus !== this.prevStatus) {
+                        this.order = fresh;
+                        if (newStatus === 'ready' || newStatus === 'delivered') {
+                            this.playReadySound();
+                            this.stopPolling();
+                        }
+                        this.prevStatus = newStatus;
+                    }
+                } catch(e) {}
+            },
+            playReadySound() {
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const notes = [523, 659, 784, 1047];
+                    notes.forEach((freq, i) => {
+                        const o = ctx.createOscillator();
+                        const g = ctx.createGain();
+                        o.connect(g); g.connect(ctx.destination);
+                        o.frequency.value = freq; o.type = 'sine';
+                        const t = ctx.currentTime + i * 0.18;
+                        g.gain.setValueAtTime(0.35, t);
+                        g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+                        o.start(t); o.stop(t + 0.4);
+                    });
+                } catch(e) {}
             },
 
             fmt(n) { return new Intl.NumberFormat('fr-FR').format(n); }

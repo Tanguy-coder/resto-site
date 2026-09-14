@@ -296,6 +296,64 @@
         </div>
     </section>
 
+    {{-- Laisser un avis --}}
+    <section class="fade-up py-16 px-6 lg:px-12">
+        <div class="max-w-xl mx-auto">
+            <div class="text-center mb-8">
+                <span class="section-label">Votre expérience</span>
+                <h2 class="section-title mt-3">Laisser un avis</h2>
+            </div>
+
+            @if(session('review_sent'))
+                <div class="card-food-flat p-6 text-center text-accent-green font-semibold">
+                    ✓ Merci ! Votre avis sera publié après validation.
+                </div>
+            @else
+                <form method="POST" action="{{ route('reviews.store') }}" class="card-food-flat p-6 lg:p-8 space-y-5">
+                    @csrf
+                    <div x-data="{ rating: 5 }">
+                        <label class="block text-sm font-bold text-foreground mb-2">Note</label>
+                        <div class="flex gap-2">
+                            @for($i = 1; $i <= 5; $i++)
+                                <button type="button" @click="rating = {{ $i }}"
+                                        class="text-2xl transition-transform hover:scale-110"
+                                        :class="{{ $i }} <= rating ? 'text-accent-mustard' : 'text-foreground/20'">★</button>
+                            @endfor
+                        </div>
+                        <input type="hidden" name="rating" :value="rating">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-foreground mb-2">Votre nom</label>
+                        <input type="text" name="name" value="{{ old('name') }}" required maxlength="100"
+                               class="w-full px-4 py-3 bg-surface-2 border border-primary/20 rounded-xl text-foreground placeholder-foreground/40 focus:outline-none focus:border-primary transition-colors"
+                               placeholder="Prénom ou pseudo">
+                        @error('name') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-foreground mb-2">Votre avis</label>
+                        <textarea name="content" required maxlength="1000" rows="4"
+                                  class="w-full px-4 py-3 bg-surface-2 border border-primary/20 rounded-xl text-foreground placeholder-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none"
+                                  placeholder="Partagez votre expérience...">{{ old('content') }}</textarea>
+                        @error('content') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-foreground mb-2">Ville <span class="text-foreground/40 font-normal">(optionnel)</span></label>
+                        <input type="text" name="location" value="{{ old('location') }}" maxlength="100"
+                               class="w-full px-4 py-3 bg-surface-2 border border-primary/20 rounded-xl text-foreground placeholder-foreground/40 focus:outline-none focus:border-primary transition-colors"
+                               placeholder="Ex : Kouba">
+                    </div>
+
+                    <button type="submit" class="btn-primary-warm w-full !py-3.5 text-base">
+                        Envoyer mon avis →
+                    </button>
+                </form>
+            @endif
+        </div>
+    </section>
+
     {{-- Locations --}}
     <section class="fade-up py-20 lg:py-28 px-6 lg:px-12 relative overflow-hidden">
         {{-- Deco image — RIGHT side, barely peeking --}}

@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,7 @@ Route::get('/commande', [PageController::class, 'menu'])->name('menu');
 Route::get('/commande/finaliser', [PageController::class, 'checkout'])->name('checkout');
 Route::get('/commande/suivi', [PageController::class, 'tracking'])->name('tracking');
 
+Route::post('/avis', [ReviewController::class, 'store'])->name('reviews.store');
 Route::post('/api/orders', [OrderController::class, 'store'])->name('api.orders.store');
 Route::post('/api/orders/track', [OrderController::class, 'track'])->name('api.orders.track');
 Route::get('/a-propos', [PageController::class, 'about'])->name('about');
@@ -62,8 +64,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', ProductController::class)->except('show');
     Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('testimonials', TestimonialController::class)->except('show');
+    Route::patch('testimonials/{testimonial}/approve', [TestimonialController::class, 'approve'])->name('testimonials.approve');
     Route::resource('locations', LocationController::class)->except('show');
     Route::resource('hero-slides', HeroSlideController::class)->except('show');
+    Route::get('orders/poll', [AdminOrderController::class, 'poll'])->name('orders.poll');
     Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');

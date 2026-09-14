@@ -98,6 +98,7 @@ class OrderController extends Controller
         return response()->json([
             'found' => true,
             'order_number' => $order->order_number,
+            'location_id'  => $order->location_id,
             'status' => $order->status,
             'status_label' => $order->status_label,
             'service_type' => $order->service_type,

@@ -22,6 +22,12 @@
             <div class="stat-value">{{ $categoriesCount }}</div>
             <div class="stat-label">Catégories</div>
         </div>
+        @if($pendingReviewsCount > 0)
+        <a href="{{ route('admin.testimonials.index') }}" class="stat-card" style="border-color:rgba(234,179,8,0.5);text-decoration:none;cursor:pointer;">
+            <div class="stat-value" style="color:#fbbf24;">{{ $pendingReviewsCount }}</div>
+            <div class="stat-label">Avis en attente ⏳</div>
+        </a>
+        @endif
     </div>
 
     @if($recentOrders->count())

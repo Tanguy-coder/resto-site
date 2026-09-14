@@ -17,6 +17,7 @@ class DashboardController extends Controller
             'productsCount' => Product::count(),
             'categoriesCount' => Category::count(),
             'testimonialsCount' => Testimonial::count(),
+            'pendingReviewsCount' => Testimonial::where('is_active', false)->count(),
             'locationsCount' => Location::count(),
             'ordersCount' => Order::count(),
             'ordersTodayCount' => Order::whereDate('created_at', today())->count(),

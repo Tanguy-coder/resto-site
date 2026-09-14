@@ -48,4 +48,14 @@ class OrderController extends Controller
 
         return back()->with('success', "Commande #{$order->order_number} → {$order->status_label}");
     }
+
+    public function poll()
+    {
+        return response()->json([
+            'latest_id' => \App\Models\Order::max('id') ?? 0,
+            'new_count'  => \App\Models\Order::where('status', 'received')
+                                ->where('created_at', '>=', now()->subMinutes(30))
+                                ->count(),
+        ]);
+    }
 }

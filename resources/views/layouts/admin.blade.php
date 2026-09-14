@@ -136,5 +136,65 @@
             @yield('content')
         </div>
     </div>
+
+<script>
+(function() {
+    const POLL_URL = '{{ route('admin.orders.poll') }}';
+    const STORAGE_KEY = 'admin_last_order_id';
+
+    function playNewOrderSound() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            function beep(freq, start, dur) {
+                const o = ctx.createOscillator();
+                const g = ctx.createGain();
+                o.connect(g); g.connect(ctx.destination);
+                o.frequency.value = freq; o.type = 'sine';
+                g.gain.setValueAtTime(0.4, ctx.currentTime + start);
+                g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+                o.start(ctx.currentTime + start);
+                o.stop(ctx.currentTime + start + dur + 0.05);
+            }
+            beep(880,  0,    0.15);
+            beep(1100, 0.2,  0.15);
+            beep(880,  0.4,  0.25);
+        } catch(e) {}
+    }
+
+    let lastId = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+    let initialized = false;
+
+    async function poll() {
+        try {
+            const res = await fetch(POLL_URL, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            if (!res.ok) return;
+            const data = await res.json();
+            const currentId = data.latest_id || 0;
+
+            if (!initialized) {
+                lastId = currentId;
+                localStorage.setItem(STORAGE_KEY, currentId);
+                initialized = true;
+                return;
+            }
+
+            if (currentId > lastId) {
+                lastId = currentId;
+                localStorage.setItem(STORAGE_KEY, currentId);
+                playNewOrderSound();
+                const link = document.querySelector('a[href*="orders"]');
+                if (link) {
+                    link.style.color = '#f59e0b';
+                    link.style.fontWeight = 'bold';
+                    setTimeout(() => { link.style.color = ''; link.style.fontWeight = ''; }, 10000);
+                }
+            }
+        } catch(e) {}
+    }
+
+    poll();
+    setInterval(poll, 15000);
+})();
+</script>
 </body>
 </html>
