@@ -78,9 +78,7 @@
             </tbody>
         </table>
 
-        <div class="pagination">
-            {{ $orders->withQueryString()->links('pagination::simple-default') }}
-        </div>
+        {{ $orders->withQueryString()->links('pagination.admin') }}
     @endif
 
 @endsection

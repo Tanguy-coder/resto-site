@@ -42,7 +42,5 @@
         </tbody>
     </table>
 
-    <div class="pagination">
-        {{ $products->links() }}
-    </div>
+    {{ $products->links('pagination.admin') }}
 @endsection

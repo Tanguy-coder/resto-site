@@ -38,6 +38,7 @@ class SettingController extends Controller
             'about_title' => ['label' => 'Titre', 'type' => 'text'],
             'about_text_1' => ['label' => 'Paragraphe 1', 'type' => 'textarea'],
             'about_text_2' => ['label' => 'Paragraphe 2', 'type' => 'textarea'],
+            'about_image' => ['label' => 'Photo du restaurant', 'type' => 'image'],
         ]],
         'stats' => ['label' => 'Statistiques', 'fields' => [
             'stat_1_value' => ['label' => 'Stat 1 — valeur', 'type' => 'text'],
@@ -94,9 +95,10 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'settings'      => 'required|array',
-            'settings.*'    => 'nullable|string',
-            'logo_upload'   => 'nullable|image|max:2048',
+            'settings'            => 'required|array',
+            'settings.*'          => 'nullable|string',
+            'logo_upload'         => 'nullable|image|max:2048',
+            'about_image_upload'  => 'nullable|image|max:4096',
         ]);
 
         // Handle logo file upload
@@ -105,6 +107,14 @@ class SettingController extends Controller
             $filename = 'logo.' . $file->getClientOriginalExtension();
             $file->move(public_path('images'), $filename);
             $data['settings']['site_logo'] = 'images/' . $filename;
+        }
+
+        // Handle about image upload
+        if ($request->hasFile('about_image_upload') && $request->file('about_image_upload')->isValid()) {
+            $file = $request->file('about_image_upload');
+            $filename = 'about.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+            $data['settings']['about_image'] = 'images/' . $filename;
         }
 
         foreach ($data['settings'] as $key => $value) {

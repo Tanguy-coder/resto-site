@@ -45,6 +45,20 @@
                             <input type="hidden" name="settings[{{ $key }}]" value="{{ $currentLogo }}">
                             <p style="color:#666;font-size:12px;margin-top:6px;">Formats acceptés : JPG, PNG, WebP, SVG (max 2 Mo). Le fichier sera enregistré sous <code>public/images/logo.ext</code></p>
 
+                        @elseif($field['type'] === 'image')
+                            @php $currentImg = $values[$key] ?? 'images/kouba.png'; @endphp
+                            <div style="display:flex;align-items:center;gap:16px;margin-bottom:10px;">
+                                <img src="{{ asset($currentImg) }}" alt="Image actuelle"
+                                     style="width:120px;height:80px;object-fit:cover;border-radius:8px;border:2px solid #444;"
+                                     id="img_preview_{{ $key }}">
+                                <span style="color:#888;font-size:13px;">Image actuelle</span>
+                            </div>
+                            <input type="file" name="{{ $key }}_upload" accept="image/*"
+                                   style="color:#ccc;font-size:13px;"
+                                   onchange="document.getElementById('img_preview_{{ $key }}').src = URL.createObjectURL(this.files[0])">
+                            <input type="hidden" name="settings[{{ $key }}]" value="{{ $currentImg }}">
+                            <p style="color:#666;font-size:12px;margin-top:6px;">Formats acceptés : JPG, PNG, WebP (max 4 Mo).</p>
+
                         @else
                             <input type="text" id="setting_{{ $key }}" name="settings[{{ $key }}]" value="{{ $values[$key] ?? '' }}">
                         @endif

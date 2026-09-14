@@ -46,7 +46,5 @@
         </tbody>
     </table>
 
-    <div class="pagination">
-        {{ $slides->links() }}
-    </div>
+    {{ $slides->links('pagination.admin') }}
 @endsection

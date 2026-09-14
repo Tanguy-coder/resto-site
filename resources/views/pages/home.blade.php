@@ -204,25 +204,37 @@
     </section>
 
     {{-- About / Story --}}
-    <section class="fade-up py-20 lg:py-28 px-6 lg:px-12 relative overflow-hidden">
-        <div class="max-w-3xl mx-auto relative z-10 text-center">
-            <span class="section-label">{{ $settings['about_eyebrow'] ?? "Notre esprit" }}</span>
-            <h2 class="section-title mt-3">{{ $settings['about_title'] ?? 'Le burger artisanal, c\'est notre spécialité' }}</h2>
-            <p class="text-foreground/70 mt-6 leading-relaxed text-lg">{{ $settings['about_text_1'] ?? 'Tout part d\'une idée simple : préparer chaque burger, tacos et pizza comme s\'il était le premier.' }}</p>
-            <p class="text-foreground/70 mt-4 leading-relaxed">{{ $settings['about_text_2'] ?? 'Depuis nos cuisines, on sert celles et ceux qui veulent manger vite sans sacrifier le goût.' }}</p>
+    <section class="fade-up py-20 lg:py-28 px-6 lg:px-12">
+        <div class="max-w-5xl mx-auto">
+            <div class="card-food-flat grid lg:grid-cols-2">
+                {{-- Left: texte + stats --}}
+                <div class="p-8 lg:p-12 flex flex-col justify-center">
+                    <span class="section-label">{{ $settings['about_eyebrow'] ?? "L'esprit Bavière" }}</span>
+                    <h2 class="section-title mt-3">{{ $settings['about_title'] ?? 'Le burger artisanal, c\'est notre spécialité' }}</h2>
+                    <p class="text-foreground/70 mt-6 leading-relaxed">{{ $settings['about_text_1'] ?? 'Tout part d\'une idée simple : préparer chaque burger, tacos et pizza comme s\'il était le premier.' }}</p>
+                    <p class="text-foreground/70 mt-4 leading-relaxed">{{ $settings['about_text_2'] ?? 'Depuis nos cuisines, on sert celles et ceux qui veulent manger vite sans sacrifier le goût.' }}</p>
 
-            <div class="grid grid-cols-3 gap-6 mt-12 max-w-lg mx-auto">
-                <div class="text-center">
-                    <span class="text-4xl lg:text-5xl font-heading font-extrabold text-accent-mustard block" data-counter="{{ $settings['stat_1_value'] ?? 2 }}">0</span>
-                    <p class="text-foreground/60 text-xs mt-1">{{ $settings['stat_1_label'] ?? 'Adresses à Alger' }}</p>
+                    <div class="grid grid-cols-3 gap-6 mt-10">
+                        <div>
+                            <span class="text-4xl lg:text-5xl font-heading font-extrabold text-accent-mustard block" data-counter="{{ $settings['stat_1_value'] ?? 2 }}">0</span>
+                            <p class="text-foreground/60 text-xs mt-1">{{ $settings['stat_1_label'] ?? 'Adresses' }}</p>
+                        </div>
+                        <div>
+                            <span class="text-4xl lg:text-5xl font-heading font-extrabold text-accent-mustard block" data-counter="{{ $settings['stat_2_value'] ?? 100 }}">0</span>
+                            <p class="text-foreground/60 text-xs mt-1">{{ $settings['stat_2_label'] ?? '% Fait maison' }}</p>
+                        </div>
+                        <div>
+                            <span class="text-4xl lg:text-5xl font-heading font-extrabold text-accent-mustard block">{{ $settings['stat_3_value'] ?? '13' }}h+</span>
+                            <p class="text-foreground/60 text-xs mt-1">{{ $settings['stat_3_label'] ?? "D'ouverture/jour" }}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="text-center">
-                    <span class="text-4xl lg:text-5xl font-heading font-extrabold text-accent-mustard block" data-counter="{{ $settings['stat_2_value'] ?? 100 }}">0</span>
-                    <p class="text-foreground/60 text-xs mt-1">{{ $settings['stat_2_label'] ?? '% Fait maison' }}</p>
-                </div>
-                <div class="text-center">
-                    <span class="text-4xl lg:text-5xl font-heading font-extrabold text-accent-mustard block">{{ $settings['stat_3_value'] ?? '12' }}h+</span>
-                    <p class="text-foreground/60 text-xs mt-1">{{ $settings['stat_3_label'] ?? "D'ouverture/jour" }}</p>
+
+                {{-- Right: photo du restaurant --}}
+                <div class="relative min-h-[260px] lg:min-h-0">
+                    <img src="{{ asset($settings['about_image'] ?? 'images/kouba.png') }}"
+                         alt="{{ $settings['site_name'] ?? 'La Bavière' }}"
+                         class="absolute inset-0 w-full h-full object-cover">
                 </div>
             </div>
         </div>

@@ -73,7 +73,5 @@
         </tbody>
     </table>
 
-    <div class="pagination">
-        {{ $testimonials->links() }}
-    </div>
+    {{ $testimonials->links('pagination.admin') }}
 @endsection

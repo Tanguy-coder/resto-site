@@ -40,7 +40,5 @@
         </tbody>
     </table>
 
-    <div class="pagination">
-        {{ $categories->links() }}
-    </div>
+    {{ $categories->links('pagination.admin') }}
 @endsection
